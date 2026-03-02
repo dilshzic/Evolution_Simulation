@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.algorithmx.evolutionsimulation"
-    compileSdk = 35 // Updated to 35 as it is the current stable version
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.algorithmx.evolutionsimulation"
@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags += "-std=c++17"
+                cppFlags("-std=c++17")
             }
         }
     }
@@ -32,16 +32,16 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
     buildFeatures {
         compose = true
     }
+
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
@@ -51,12 +51,12 @@ android {
 }
 
 dependencies {
+    // FIX: Corrected from libs.androidx.core-ktx to libs.androidx.core.ktx
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
+
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -67,4 +67,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+// FIX: Replacement for deprecated kotlinOptions
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
 }

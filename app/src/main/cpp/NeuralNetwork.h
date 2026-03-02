@@ -90,6 +90,15 @@ public:
         mutateVec(biasesO);
     }
 
+    /**
+     * Returns a combined vector of all weights for visualization.
+     */
+    std::vector<float> getAllWeights() const {
+        std::vector<float> combined = weightsIH;
+        combined.insert(combined.end(), weightsHO.begin(), weightsHO.end());
+        return combined;
+    }
+
 private:
     // Weights and biases stored in 1D vectors for cache-locality
     std::vector<float> weightsIH; // Hidden layer weights (size: 7 * 5)
